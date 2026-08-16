@@ -1,0 +1,27 @@
+{
+  "TWITCHCHAT.SettingChannelName": "Twitch channel",
+  "TWITCHCHAT.SettingChannelHint": "The channel name to follow, without URL and without #. Example: simonepenza",
+  "TWITCHCHAT.SettingEnabledName": "Connection enabled",
+  "TWITCHCHAT.SettingEnabledHint": "Enable or disable the bridge to Twitch chat. Only the active GM connects.",
+  "TWITCHCHAT.SettingIgnoredName": "Ignored users",
+  "TWITCHCHAT.SettingIgnoredHint": "Comma-separated list of usernames whose messages will not be shown (usually bots).",
+  "TWITCHCHAT.SettingIgnoreCommandsName": "Ignore commands",
+  "TWITCHCHAT.SettingIgnoreCommandsHint": "Discard messages starting with ! (typically bot commands).",
+  "TWITCHCHAT.SettingEmotesName": "Show emotes",
+  "TWITCHCHAT.SettingEmotesHint": "Replace Twitch emotes with their images.",
+  "TWITCHCHAT.SettingRateLimitName": "Messages per minute limit",
+  "TWITCHCHAT.SettingRateLimitHint": "Maximum number of Twitch messages posted to chat each minute. Extra messages are dropped so the game chat stays readable. 0 = no limit.",
+  "TWITCHCHAT.SettingMaxLengthName": "Maximum message length",
+  "TWITCHCHAT.SettingMaxLengthHint": "Messages longer than this get truncated.",
+
+  "TWITCHCHAT.Connected": "Connected to {channel}'s Twitch chat.",
+  "TWITCHCHAT.Disconnected": "Disconnected from Twitch chat.",
+  "TWITCHCHAT.Reconnecting": "Twitch connection lost. Retrying in {seconds}s.",
+  "TWITCHCHAT.NoChannel": "No Twitch channel configured. Set one in the module settings.",
+  "TWITCHCHAT.Error": "Twitch chat connection error.",
+  "TWITCHCHAT.StatusConnected": "Twitch: connected to {channel}.",
+  "TWITCHCHAT.StatusDisconnected": "Twitch: not connected.",
+  "TWITCHCHAT.GMOnly": "Only the GM can control the Twitch connection.",
+  "TWITCHCHAT.Usage": "Usage: /twitch connect | disconnect | status | <channel-name>",
+  "TWITCHCHAT.Badge": "Twitch"
+}

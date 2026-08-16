@@ -1,0 +1,45 @@
+/* Twitch Chat Integration — sidebar styling */
+
+.chat-message.twitch-chat-message,
+li.chat-message.twitch-chat-message {
+  border-left: 3px solid #9146ff;
+  background: rgba(145, 70, 255, 0.07);
+}
+
+.twitch-chat-message .message-header {
+  position: relative;
+}
+
+/* "TWITCH" pill in front of the viewer's name */
+.twitch-chat-message .twitch-chat-sender::before {
+  content: "TWITCH";
+  display: inline-block;
+  margin-right: 0.4em;
+  padding: 0 0.35em;
+  border-radius: 3px;
+  background: #9146ff;
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  vertical-align: middle;
+  line-height: 1.5;
+}
+
+.twitch-chat-message .twitch-chat-sender {
+  font-weight: 600;
+}
+
+.twitch-chat-body {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.twitch-chat-body img.twitch-emote {
+  height: 1.6em;
+  width: auto;
+  vertical-align: middle;
+  margin: 0 1px;
+  border: none;
+  display: inline-block;
+}
