@@ -106,15 +106,28 @@ function syncConnection({ silent = false } = {}) {
   client.connect(normalized);
 }
 
+/**
+ * Foundry awaits every setting's `onChange` while submitting the settings form.
+ * If ours threw, the submission would abort and the remaining settings would
+ * silently fail to save — so nothing from this module is allowed to escape.
+ */
+function safeSyncConnection(options) {
+  try {
+    syncConnection(options);
+  } catch (err) {
+    console.error(`${MODULE_ID} | errore durante la sincronizzazione della connessione`, err);
+  }
+}
+
 Hooks.once("init", () => {
-  registerSettings(() => syncConnection());
+  registerSettings(() => safeSyncConnection());
 });
 
 Hooks.once("ready", () => {
-  syncConnection({ silent: true });
+  safeSyncConnection({ silent: true });
 
   // A GM disconnecting can promote this client to active GM; re-evaluate when users change.
-  Hooks.on("userConnected", () => syncConnection({ silent: true }));
+  Hooks.on("userConnected", () => safeSyncConnection({ silent: true }));
 
   game.modules.get(MODULE_ID).api = {
     connect: (channel) => client?.connect(channel),
