@@ -48,13 +48,23 @@ async function postToGameChat({ user, login, color, text, emotes }) {
   if (!html) return;
 
   const safeColor = sanitizeColor(color);
-  const style = safeColor ? ` style="color: ${safeColor}"` : "";
+  const colorStyle = safeColor ? ` style="color: ${safeColor}"` : "";
   const body = isAction ? `<em>${html}</em>` : html;
+
+  // The viewer's name goes in the message BODY, not in the speaker alias: the
+  // header is drawn by the active system/theme (dnd5e redraws it entirely) and
+  // typically shows the author — us, the GM — no matter what alias we set.
+  const author = `<span class="twitch-chat-author"${colorStyle}>${escapeHtml(user)}</span>`;
+  const separator = isAction ? " " : `<span class="twitch-chat-sep">:</span> `;
 
   await ChatMessage.implementation.create({
     style: CONST.CHAT_MESSAGE_STYLES.OOC,
     speaker: { alias: user },
-    content: `<div class="twitch-chat-body"${style}>${body}</div>`,
+    content:
+      `<div class="twitch-chat-body">` +
+      `<span class="twitch-chat-badge">Twitch</span>` +
+      `${author}${separator}<span class="twitch-chat-text">${body}</span>` +
+      `</div>`,
     flags: {
       [MODULE_ID]: {
         twitch: true,
@@ -138,17 +148,29 @@ Hooks.once("ready", () => {
   };
 });
 
+/**
+ * Selectors the various systems/themes use for the author's name and portrait
+ * in the message header. We hide whichever we find: the header would show the
+ * GM who created the document, and the real sender is already in the body.
+ */
+const HEADER_AUTHOR_SELECTORS = [
+  ".message-sender",
+  ".message-header .name-stacked",
+  ".message-header .author",
+  ".message-header .avatar",
+  ".message-header img.avatar",
+  ".message-header .portrait"
+];
+
 /** Tag Twitch messages in the sidebar so the stylesheet can pick them out. */
 function decorateChatMessage(message, element) {
   if (!message.getFlag(MODULE_ID, "twitch")) return;
   const node = element instanceof HTMLElement ? element : element?.[0];
   if (!node) return;
   node.classList.add("twitch-chat-message");
-  const color = message.getFlag(MODULE_ID, "color");
-  const alias = node.querySelector(".message-sender");
-  if (alias) {
-    alias.classList.add("twitch-chat-sender");
-    if (color) alias.style.color = color;
+
+  for (const selector of HEADER_AUTHOR_SELECTORS) {
+    for (const el of node.querySelectorAll(selector)) el.classList.add("twitch-chat-hidden-author");
   }
 }
 

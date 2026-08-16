@@ -2,7 +2,7 @@
   "id": "twitch-chat-integration",
   "title": "Twitch Chat Integration",
   "description": "Porta la chat del tuo canale Twitch direttamente nella chat di Foundry VTT. Connessione anonima in sola lettura: nessun token, nessun server esterno, nessuna dipendenza.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "authors": [
     {
       "name": "Mirko",
@@ -34,7 +34,7 @@
   ],
   "url": "https://github.com/PSM90/foundry-twitch-chat-integration",
   "manifest": "https://github.com/PSM90/foundry-twitch-chat-integration/releases/latest/download/module.json",
-  "download": "https://github.com/PSM90/foundry-twitch-chat-integration/releases/download/v1.0.1/module.zip",
+  "download": "https://github.com/PSM90/foundry-twitch-chat-integration/releases/download/v1.0.2/module.zip",
   "readme": "https://github.com/PSM90/foundry-twitch-chat-integration/blob/main/README.md",
   "bugs": "https://github.com/PSM90/foundry-twitch-chat-integration/issues",
   "license": "LICENSE",

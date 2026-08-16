@@ -6,33 +6,42 @@ li.chat-message.twitch-chat-message {
   background: rgba(145, 70, 255, 0.07);
 }
 
-.twitch-chat-message .message-header {
-  position: relative;
-}
-
-/* "TWITCH" pill in front of the viewer's name */
-.twitch-chat-message .twitch-chat-sender::before {
-  content: "TWITCH";
-  display: inline-block;
-  margin-right: 0.4em;
-  padding: 0 0.35em;
-  border-radius: 3px;
-  background: #9146ff;
-  color: #fff;
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  vertical-align: middle;
-  line-height: 1.5;
-}
-
-.twitch-chat-message .twitch-chat-sender {
-  font-weight: 600;
+/* The header would show the GM who created the document — the real sender is
+   printed in the body instead. Hidden rather than removed so the timestamp and
+   the message controls next to it keep working. */
+.twitch-chat-message .twitch-chat-hidden-author {
+  display: none !important;
 }
 
 .twitch-chat-body {
   overflow-wrap: anywhere;
   word-break: break-word;
+  line-height: 1.5;
+}
+
+/* "Twitch" pill in front of the viewer's name */
+.twitch-chat-body .twitch-chat-badge {
+  display: inline-block;
+  margin-right: 0.4em;
+  padding: 0 0.4em;
+  border-radius: 3px;
+  background: #9146ff;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: middle;
+  line-height: 1.6;
+}
+
+.twitch-chat-body .twitch-chat-author {
+  font-weight: 700;
+}
+
+.twitch-chat-body .twitch-chat-sep {
+  font-weight: 700;
+  margin-right: 0.15em;
 }
 
 .twitch-chat-body img.twitch-emote {
