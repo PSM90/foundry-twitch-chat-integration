@@ -1,49 +1,68 @@
 name: Release Module
 
-# Crea una release Foundry-ready ogni volta che pubblichi un tag vX.Y.Z su GitHub.
-# Il workflow riscrive version/download dentro module.json, impacchetta module.zip
-# e allega entrambi alla release: è quello che gli URL "manifest"/"download" si aspettano.
+# Basta pubblicare un tag vX.Y.Z: il workflow crea da solo la release,
+# riscrive version/url/manifest/download dentro module.json, impacchetta un
+# module.zip *piatto* (module.json in cima all'archivio, come pretendono
+# Foundry e The Forge) e allega manifest + zip alla release.
+#
+#   git tag v1.0.1
+#   git push origin v1.0.1
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag da rilasciare (es. v1.0.1)"
+        required: true
 
 permissions:
   contents: write
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Ricava la versione dal tag
-        id: version
-        run: echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+      - name: Ricava la versione
+        id: v
+        run: |
+          TAG="${{ github.event.inputs.tag || github.ref_name }}"
+          echo "tag=$TAG"              >> "$GITHUB_OUTPUT"
+          echo "version=${TAG#v}"      >> "$GITHUB_OUTPUT"
 
       - name: Aggiorna module.json
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: module.json
         env:
-          version: ${{ steps.version.outputs.value }}
-          url: https://github.com/${{ github.repository }}
-          manifest: https://github.com/${{ github.repository }}/releases/latest/download/module.json
-          download: https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/module.zip
-
-      - name: Crea module.zip
+          TAG: ${{ steps.v.outputs.tag }}
+          VERSION: ${{ steps.v.outputs.version }}
+          REPO: ${{ github.repository }}
         run: |
-          zip -r module.zip \
-            module.json \
-            README.md \
-            LICENSE \
-            scripts \
-            styles \
-            lang
+          jq --arg version "$VERSION" \
+             --arg url      "https://github.com/$REPO" \
+             --arg manifest "https://github.com/$REPO/releases/latest/download/module.json" \
+             --arg download "https://github.com/$REPO/releases/download/$TAG/module.zip" \
+             '.version = $version | .url = $url | .manifest = $manifest | .download = $download' \
+             module.json > module.tmp.json
+          mv module.tmp.json module.json
+          cat module.json
 
-      - name: Allega gli artefatti alla release
+      - name: Crea module.zip (archivio piatto)
+        run: zip -r module.zip module.json README.md LICENSE scripts styles lang
+
+      - name: Controlla che module.json sia in cima all'archivio
+        run: |
+          unzip -l module.zip
+          unzip -p module.zip module.json > /dev/null
+
+      - name: Pubblica la release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.v.outputs.tag }}
+          name: ${{ steps.v.outputs.tag }}
+          generate_release_notes: true
           files: |
             module.json
             module.zip
