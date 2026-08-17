@@ -39,9 +39,25 @@ li.chat-message.twitch-chat-message {
   font-weight: 700;
 }
 
+/* Separator, message text and timestamp in white: the viewer's Twitch colour
+   belongs to their name alone, everything else stays readable on the dark
+   sidebar. !important because systems and themes style these themselves. */
+.twitch-chat-body .twitch-chat-sep,
+.twitch-chat-body .twitch-chat-text {
+  color: #fff !important;
+}
+
 .twitch-chat-body .twitch-chat-sep {
   font-weight: 700;
   margin-right: 0.15em;
+}
+
+.twitch-chat-message .message-metadata,
+.twitch-chat-message .message-metadata *,
+.twitch-chat-message .message-timestamp,
+.twitch-chat-message time,
+.twitch-chat-message .message-header .flavor-text {
+  color: #fff !important;
 }
 
 .twitch-chat-body img.twitch-emote {
