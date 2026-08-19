@@ -22,6 +22,9 @@
   "TWITCHCHAT.StatusConnected": "Twitch: connesso a {channel}.",
   "TWITCHCHAT.StatusDisconnected": "Twitch: non connesso.",
   "TWITCHCHAT.GMOnly": "Solo il GM può controllare la connessione a Twitch.",
+  "TWITCHCHAT.TabTitle": "Chat Twitch",
+  "TWITCHCHAT.TabTooltip": "Chat della live (Twitch)",
+  "TWITCHCHAT.StreamEmpty": "Nessun messaggio dalla live per ora.",
   "TWITCHCHAT.Usage": "Uso: /twitch connect | disconnect | status | <nome-canale>",
   "TWITCHCHAT.Badge": "Twitch"
 }

@@ -1,6 +1,7 @@
 import { MODULE_ID, SETTINGS, registerSettings, getSetting, getIgnoredUsers } from "./settings.js";
 import { TwitchClient } from "./twitch-client.js";
 import { formatMessage, escapeHtml, sanitizeColor } from "./format.js";
+import { TwitchStreamTab } from "./streaming-tab.js";
 
 /**
  * Twitch Chat Integration
@@ -129,8 +130,44 @@ function safeSyncConnection(options) {
   }
 }
 
+/**
+ * Register the "stream chat" sidebar tab right after the standard chat tab.
+ * The tab button comes from Sidebar.TABS; the application class from CONFIG.ui
+ * (Foundry instantiates `ui.twitch` from it during initializeUI).
+ */
+function registerSidebarTab() {
+  const Sidebar = foundry.applications.sidebar.Sidebar;
+  const entries = Object.entries(Sidebar.TABS);
+  const chatIndex = entries.findIndex(([id]) => id === "chat");
+  entries.splice(chatIndex + 1, 0, [
+    TwitchStreamTab.tabName,
+    { tooltip: "TWITCHCHAT.TabTooltip", icon: "fa-brands fa-twitch" }
+  ]);
+  Sidebar.TABS = Object.fromEntries(entries);
+  CONFIG.ui[TwitchStreamTab.tabName] = TwitchStreamTab;
+}
+
+/** @returns {TwitchStreamTab[]} the sidebar tab and, if open, its popout */
+function streamTabApps() {
+  const tab = ui[TwitchStreamTab.tabName];
+  return [tab, tab?.popout].filter((app) => app);
+}
+
 Hooks.once("init", () => {
   registerSettings(() => safeSyncConnection());
+  registerSidebarTab();
+});
+
+// Mirror Twitch messages into the dedicated tab as they arrive; these hooks
+// fire on every client, so players see the tab update live just like the GM.
+Hooks.on("createChatMessage", (message) => {
+  if (!TwitchStreamTab.isTwitchMessage(message)) return;
+  for (const app of streamTabApps()) app.addMessage(message);
+});
+
+Hooks.on("deleteChatMessage", (message) => {
+  if (!TwitchStreamTab.isTwitchMessage(message)) return;
+  for (const app of streamTabApps()) app.removeMessage(message.id);
 });
 
 Hooks.once("ready", () => {
@@ -174,9 +211,7 @@ function decorateChatMessage(message, element) {
   }
 }
 
-// v13 renders chat messages as plain HTMLElement; older cores pass a jQuery object.
 Hooks.on("renderChatMessageHTML", decorateChatMessage);
-Hooks.on("renderChatMessage", decorateChatMessage);
 
 /** `/twitch` chat command for quick control without opening the settings menu. */
 Hooks.on("chatMessage", (_chatLog, message) => {

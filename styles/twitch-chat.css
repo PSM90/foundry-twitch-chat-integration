@@ -60,6 +60,31 @@ li.chat-message.twitch-chat-message {
   color: #fff !important;
 }
 
+/* ------------------------------------------------------------------ */
+/* "Stream chat" sidebar tab: only the messages coming from the live   */
+
+/* Core styles for .chat-log are scoped to the standard chat tab, so the
+   dedicated tab lays out its own list. */
+.twitch-sidebar ol.twitch-stream-log {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--chat-message-spacing, 4px);
+  margin: 0;
+  padding: 4px;
+  overflow: hidden auto;
+  list-style: none;
+  scrollbar-gutter: stable;
+}
+
+.twitch-sidebar .twitch-stream-empty {
+  margin: auto;
+  padding: 1rem;
+  text-align: center;
+  font-style: italic;
+  color: var(--color-text-subtle, #999);
+}
+
 .twitch-chat-body img.twitch-emote {
   height: 1.6em;
   width: auto;

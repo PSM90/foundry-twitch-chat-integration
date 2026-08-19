@@ -63,6 +63,13 @@ Impostazioni → Configura Impostazioni → Twitch Chat Integration:
 | Limite messaggi al minuto | 20 | Anti-flood: oltre questa soglia i messaggi vengono scartati |
 | Lunghezza massima messaggio | 300 | Oltre questa soglia il messaggio viene troncato |
 
+## Scheda laterale "Chat Twitch"
+
+Nella barra laterale destra, accanto all'icona della chat, compare una scheda con l'icona di
+Twitch che mostra **solo** i messaggi arrivati dalla live. I messaggi restano comunque anche
+nella chat principale: la scheda è una vista filtrata sugli stessi `ChatMessage`, visibile a
+GM e giocatori. Col tasto destro sull'icona la scheda si stacca in una finestra separata.
+
 ## Comando `/twitch`
 
 Solo per il GM:
@@ -109,6 +116,7 @@ twitch-chat-integration/
 │   └── it.json
 ├── scripts/
 │   ├── module.js         # hook Foundry, settings, creazione ChatMessage
+│   ├── streaming-tab.js  # scheda laterale con i soli messaggi della live
 │   ├── twitch-client.js  # connessione WebSocket, JOIN, PING/PONG, riconnessione
 │   ├── irc.js            # parser IRCv3 (tag, prefix, comando, parametri)
 │   └── format.js         # escaping, emote, troncamento
