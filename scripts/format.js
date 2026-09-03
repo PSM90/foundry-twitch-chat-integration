@@ -6,7 +6,7 @@
  * and markup is only ever added by us, never by them.
  */
 
-const EMOTE_CDN = "https://static-cdn.jtvnw.net/emoticon-v2";
+const EMOTE_CDN = "https://static-cdn.jtvnw.net/emoticons/v2";
 
 /** Escape the five characters that matter inside an HTML text node or attribute. */
 export function escapeHtml(text) {
